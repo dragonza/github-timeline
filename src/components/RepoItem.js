@@ -2,7 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
+import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
+import { formatDate } from "../utils/utils";
 
 const useStyles = makeStyles((theme) => ({
   item: {
@@ -83,7 +85,9 @@ function RepoItem(props) {
         variant="outlined"
         classes={{ root: classes.cardRoot }}
       >
-        <Typography gutterBottom>{createdAt}</Typography>
+        <Typography gutterBottom>
+          <Box fontWeight="fontWeightBold">{formatDate(createdAt)}</Box>
+        </Typography>
         <Typography>{name}</Typography>
         <Typography>{description}</Typography>
       </Card>

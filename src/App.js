@@ -17,6 +17,14 @@ const useStyles = makeStyles((theme) => ({
   instruction: {
     marginTop: theme.spacing(2),
   },
+  header: {
+    background: "#e94947",
+    color: "white",
+  },
+  footer: {
+    position: "fixed",
+    bottom: 0,
+  },
 }));
 
 function App() {
@@ -29,14 +37,27 @@ function App() {
   return (
     <ApolloProvider className="App" client={client}>
       <CssBaseline />
+      <header className={classes.header}>
+        <Container>
+          <Typography variant="h1" gutterBottom>
+            Github Timeline
+          </Typography>
+        </Container>
+      </header>
       <Container fixed>
         <Typography variant="h5" gutterBottom className={classes.instruction}>
-          Enter your username to see the visual history of your GitHub
-          activities
+          Enter your username to see the history of your GitHub activities
         </Typography>
         <SearchBar onSubmit={handleSubmit} />
         {username && <RepoList username={username} />}
       </Container>
+      <footer className={classes.footer}>
+        <Container>
+          <Typography variant="h6" gutterBottom>
+            Made with ❤️ by <a href="https://github.com/dragonza">dragonza</a>
+          </Typography>
+        </Container>
+      </footer>
     </ApolloProvider>
   );
 }

@@ -4,6 +4,7 @@ import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
 import RepoItem from "./RepoItem";
 import PropTypes from "prop-types";
 
@@ -12,13 +13,24 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     listStyleType: "none",
   },
+  loadMoreWrapper: {
+    textAlign: "center",
+  },
 }));
 
 const GET_USER_REPO = gql`
-  query($username: String!) {
+  query($username: String!, $cursor: String) {
     user(login: $username) {
-      repositories(first: 50, orderBy: { field: CREATED_AT, direction: DESC }) {
+      repositories(
+        after: $cursor
+        first: 2
+        orderBy: { field: CREATED_AT, direction: DESC }
+      ) {
         totalCount
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
         edges {
           node {
             id
@@ -32,14 +44,38 @@ const GET_USER_REPO = gql`
   }
 `;
 
-const RepoList = ({ username = "test" }) => {
+const RepoList = ({ username = "" }) => {
   const classes = useStyles();
 
-  const { loading, error, data } = useQuery(GET_USER_REPO, {
+  const { loading, error, data, fetchMore } = useQuery(GET_USER_REPO, {
     variables: { username },
   });
   console.log("loading", loading);
   console.log("username", username);
+
+  const handleLoadMore = () => {
+    console.log("loading more");
+    const { endCursor } = data.user.repositories.pageInfo;
+    console.log("endCursor", endCursor);
+    fetchMore({
+      variables: { cursor: endCursor },
+      updateQuery: (prevResult, { fetchMoreResult }) => {
+        console.log("prevResult", prevResult);
+        return {
+          ...prevResult.user,
+          user: {
+            repositories: {
+              ...fetchMoreResult.user.repositories,
+              edges: [
+                ...prevResult.user.repositories.edges,
+                ...fetchMoreResult.user.repositories.edges,
+              ],
+            },
+          },
+        };
+      },
+    });
+  };
   if (loading) {
     return <CircularProgress />;
   }
@@ -48,14 +84,14 @@ const RepoList = ({ username = "test" }) => {
     console.log("error", error.toString());
     return (
       <Typography variant="body1" color="error">
-        Something is wrong. Please try again!
+        {error.toString()}
       </Typography>
     );
   }
   if (!data.user.repositories.totalCount) {
     return (
       <Typography variant={"overline"}>
-        There are no such repositories!
+        There are no repositories for this username yet!
       </Typography>
     );
   }
@@ -63,7 +99,7 @@ const RepoList = ({ username = "test" }) => {
   console.log("data", data);
 
   return (
-    <Box className={classes.timelineWrapper} component="ul">
+    <Box className={classes.timelineWrapper} component="ul" p={0}>
       {data.user.repositories.edges.map(({ node }) => (
         <RepoItem
           createdAt={node.createdAt}
@@ -72,6 +108,12 @@ const RepoList = ({ username = "test" }) => {
           description={node.description}
         />
       ))}
+
+      <Box className={classes.loadMoreWrapper} mt={2}>
+        <Button variant="outlined" color="primary" onClick={handleLoadMore}>
+          Load more
+        </Button>
+      </Box>
     </Box>
   );
 };
