@@ -30,7 +30,6 @@ function App() {
   const classes = useStyles();
   const [username, setUsername] = React.useState("");
   const handleSubmit = (name) => {
-    console.log("name", name);
     setUsername(name);
   };
   return (

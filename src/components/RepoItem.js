@@ -103,10 +103,17 @@ function RepoItem(props) {
         variant="outlined"
         classes={{ root: classes.cardRoot }}
       >
-        <Box fontWeight="fontWeightBold">
-          <Typography gutterBottom>{formatDate(createdAt)}</Typography>
-        </Box>
-        <Typography>{name}</Typography>
+        <Typography component="div" gutterBottom>
+          <Box fontSize="h6.fontSize" fontWeight="bold">
+            {formatDate(createdAt)}
+          </Box>
+        </Typography>
+
+        <Typography component="div" gutterBottom>
+          <Box fontSize="body1.fontSize" color="black">
+            {name}
+          </Box>
+        </Typography>
         <Typography>{description}</Typography>
       </Card>
     </li>

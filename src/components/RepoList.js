@@ -79,7 +79,6 @@ const RepoList = ({ username = "" }) => {
   }
 
   if (error) {
-    console.log("error", error.toString());
     return (
       <Typography variant="body1" color="error">
         {error.toString()}
@@ -93,8 +92,6 @@ const RepoList = ({ username = "" }) => {
       </Typography>
     );
   }
-  console.log("list Render ===============");
-  console.log("data", data);
 
   return (
     <Box className={classes.timelineWrapper} component="ul" p={0}>
