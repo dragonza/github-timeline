@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
   loadMoreWrapper: {
     textAlign: "center",
   },
+  loadMoreButton: {
+    minWidth: "120px",
+  },
 }));
 
 const GET_USER_REPO = gql`
@@ -23,7 +26,7 @@ const GET_USER_REPO = gql`
     user(login: $username) {
       repositories(
         after: $cursor
-        first: 2
+        first: 12
         orderBy: { field: CREATED_AT, direction: DESC }
       ) {
         totalCount
@@ -47,20 +50,18 @@ const GET_USER_REPO = gql`
 const RepoList = ({ username = "" }) => {
   const classes = useStyles();
 
-  const { loading, error, data, fetchMore } = useQuery(GET_USER_REPO, {
-    variables: { username },
-  });
-  console.log("loading", loading);
-  console.log("username", username);
-
+  const { loading, error, data, fetchMore, networkStatus } = useQuery(
+    GET_USER_REPO,
+    {
+      variables: { username },
+      notifyOnNetworkStatusChange: true,
+    }
+  );
   const handleLoadMore = () => {
-    console.log("loading more");
     const { endCursor } = data.user.repositories.pageInfo;
-    console.log("endCursor", endCursor);
     fetchMore({
       variables: { cursor: endCursor },
       updateQuery: (prevResult, { fetchMoreResult }) => {
-        console.log("prevResult", prevResult);
         return {
           ...prevResult.user,
           user: {
@@ -76,7 +77,7 @@ const RepoList = ({ username = "" }) => {
       },
     });
   };
-  if (loading) {
+  if (loading && !data) {
     return <CircularProgress />;
   }
 
@@ -110,8 +111,13 @@ const RepoList = ({ username = "" }) => {
       ))}
 
       <Box className={classes.loadMoreWrapper} mt={2}>
-        <Button variant="outlined" color="primary" onClick={handleLoadMore}>
-          Load more
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={handleLoadMore}
+          className={classes.loadMoreButton}
+        >
+          {loading ? <CircularProgress size={30} /> : "Load more"}
         </Button>
       </Box>
     </Box>

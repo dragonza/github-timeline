@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import FormControl from "@material-ui/core/FormControl";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -35,7 +34,7 @@ export default function SearchBar(props) {
           onSubmit={handleSubmit}
         >
           <Grid container spacing={1} alignItems="center">
-            <Grid item sm={11} xs={12}>
+            <Grid item sm={10} xs={12}>
               <TextField
                 value={query}
                 id="outlined-basic"
@@ -45,12 +44,13 @@ export default function SearchBar(props) {
                 onChange={handleText}
               />
             </Grid>
-            <Grid item sm={1} xs={12}>
+            <Grid item sm={2} xs={12}>
               <Button
                 variant="contained"
                 color="primary"
                 disabled={!query.length}
                 type="submit"
+                fullWidth
               >
                 Generate
               </Button>

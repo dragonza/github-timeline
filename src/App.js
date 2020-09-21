@@ -21,9 +21,8 @@ const useStyles = makeStyles((theme) => ({
     background: "#e94947",
     color: "white",
   },
-  footer: {
-    position: "fixed",
-    bottom: 0,
+  mainContent: {
+    minHeight: "80vh",
   },
 }));
 
@@ -44,7 +43,7 @@ function App() {
           </Typography>
         </Container>
       </header>
-      <Container fixed>
+      <Container fixed className={classes.mainContent}>
         <Typography variant="h5" gutterBottom className={classes.instruction}>
           Enter your username to see the history of your GitHub activities
         </Typography>
@@ -54,7 +53,11 @@ function App() {
       <footer className={classes.footer}>
         <Container>
           <Typography variant="h6" gutterBottom>
-            Made with ❤️ by <a href="https://github.com/dragonza">dragonza</a>
+            Made with{" "}
+            <span role="img" aria-label="heart">
+              ❤
+            </span>
+            ️ by <a href="https://github.com/dragonza">dragonza</a>
           </Typography>
         </Container>
       </footer>

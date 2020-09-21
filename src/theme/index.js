@@ -13,4 +13,14 @@ const theme = createMuiTheme({
   },
 });
 
+theme.typography.h1 = {
+  fontSize: "5rem",
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "3.5rem",
+  },
+  [theme.breakpoints.down("xs")]: {
+    fontSize: "2.5rem",
+  },
+};
+
 export default theme;

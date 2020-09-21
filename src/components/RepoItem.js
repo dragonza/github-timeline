@@ -9,12 +9,16 @@ import { formatDate } from "../utils/utils";
 const useStyles = makeStyles((theme) => ({
   item: {
     background: theme.timeline.background,
-    margin: "0 auto",
+    marginLeft: 0,
     height: "100%",
     textAlign: "center",
     width: theme.spacing(1),
     position: "relative",
     paddingTop: theme.spacing(5),
+
+    [theme.breakpoints.up("sm")]: {
+      margin: "0 auto",
+    },
 
     "&:before": {
       width: "30px",
@@ -48,6 +52,16 @@ const useStyles = makeStyles((theme) => ({
         borderColor: `transparent transparent transparent ${theme.card.main}`,
         borderStyle: "solid",
       },
+
+      [theme.breakpoints.down("xs")]: {
+        left: "32px",
+
+        "&:after": {
+          left: "-11px",
+          borderWidth: theme.card.rightArrowWidth,
+          borderColor: `transparent ${theme.card.main} transparent transparent`,
+        },
+      },
     },
   },
   cardRoot: {
@@ -68,6 +82,10 @@ const useStyles = makeStyles((theme) => ({
       width: 0,
       height: 0,
     },
+
+    [theme.breakpoints.down("xs")]: {
+      width: "calc(100vw - 91px)",
+    },
   },
 }));
 RepoItem.propTypes = {
@@ -85,9 +103,9 @@ function RepoItem(props) {
         variant="outlined"
         classes={{ root: classes.cardRoot }}
       >
-        <Typography gutterBottom>
-          <Box fontWeight="fontWeightBold">{formatDate(createdAt)}</Box>
-        </Typography>
+        <Box fontWeight="fontWeightBold">
+          <Typography gutterBottom>{formatDate(createdAt)}</Typography>
+        </Box>
         <Typography>{name}</Typography>
         <Typography>{description}</Typography>
       </Card>
