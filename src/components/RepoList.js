@@ -50,13 +50,10 @@ const GET_USER_REPO = gql`
 const RepoList = ({ username = "" }) => {
   const classes = useStyles();
 
-  const { loading, error, data, fetchMore, networkStatus } = useQuery(
-    GET_USER_REPO,
-    {
-      variables: { username },
-      notifyOnNetworkStatusChange: true,
-    }
-  );
+  const { loading, error, data, fetchMore } = useQuery(GET_USER_REPO, {
+    variables: { username },
+    notifyOnNetworkStatusChange: true,
+  });
   const handleLoadMore = () => {
     const { endCursor } = data.user.repositories.pageInfo;
     fetchMore({
